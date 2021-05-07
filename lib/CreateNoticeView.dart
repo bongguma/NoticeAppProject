@@ -226,8 +226,8 @@ class NoticeViewState extends State<NoticeView> {
   }
 
   Future<String> imageUpload() async {
-    StorageReference storageReference =
-        firebaseStorage.ref().child("/notice/${createNoticeNumber(false)}");
+    StorageReference storageReference = firebaseStorage.ref().child(
+        "/notice/${createNoticeNumber(false)}${_noticeImageList.length}");
 
     StorageUploadTask storageUploadTask;
     String downloadURL;
