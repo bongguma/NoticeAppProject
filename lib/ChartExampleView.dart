@@ -9,7 +9,7 @@ class ChartExampleView extends StatelessWidget {
       appBar: AppBar(
         title: Text('차트예제'),
       ),
-      body: ChartView(),
+      body: ChartView(), 
     );
   }
 }
