@@ -1,4 +1,4 @@
-package com.example.yj_noticeboardproject
+package com.bongguma.noticeapp
 
 import io.flutter.embedding.android.FlutterActivity
 
