@@ -29,10 +29,17 @@ class NoticeDetailView extends StatelessWidget {
                     ]),
           ],
         ),
-        body: Container(
-          child: DetailView(
-            noticeData: noticeData,
+        body: GestureDetector(
+          child: Container(
+            child: DetailView(
+              noticeData: noticeData,
+            ),
           ),
+          behavior: HitTestBehavior.deferToChild,
+          onPanDown: (_) {
+            FocusScope.of(context)
+                .requestFocus(FocusNode()); // 빈 곳 클릭 시, 키보드 내리기
+          },
         ));
   }
 
@@ -105,26 +112,44 @@ class NoticeDetailViewState extends State<DetailView> {
         child: Container(
       margin: EdgeInsets.all(10.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          Text(
+            widget.noticeData.title,
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
           Container(
             // double.infinity는 부모 길이에 맞게 100%를 채워준다.
+            color: Colors.red,
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  widget.noticeData.title,
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '내용',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                Text(
-                  widget.noticeData.contents,
-                  style: TextStyle(fontSize: 16.0),
+                Container(
+                  margin: EdgeInsets.only(top: 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '내용',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          widget.noticeData.contents,
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Container(
                     height: 400,
@@ -143,21 +168,15 @@ class NoticeDetailViewState extends State<DetailView> {
                         );
                       },
                     )),
-                // Image(
-                //     width: 150,
-                //     height: 150,
-                //     image: (widget.noticeData.imageList.length > 0)
-                //         ? NetworkImage(widget.noticeData.imageList[0])
-                //         : NetworkImage("")),
+                Container(
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: Text(
+                    '댓글',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
-            ),
-          ),
-          Container(
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Text(
-              '댓글',
-              style: TextStyle(fontSize: 16),
             ),
           ),
           _messages.length > 0 ? _listData() : _noData(),
@@ -187,6 +206,8 @@ class NoticeDetailViewState extends State<DetailView> {
       child: ListView.builder(
         shrinkWrap: true,
         padding: EdgeInsets.all(8.0),
+        physics:
+            new NeverScrollableScrollPhysics(), // ListView.builder scroll disable 해두기
         reverse: true,
         itemBuilder: (BuildContext context, int i) => _messages[i],
         itemCount: _messages.length,
