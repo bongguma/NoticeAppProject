@@ -35,14 +35,12 @@ class NoticeListViewState extends State<NoticeListView> {
   void initState() {
     super.initState();
 
-    firebaseCloudMessaging_Listeners();
-
+    _FirebaseCloudMessagingListeners();
     refreshList();
   }
 
-  void firebaseCloudMessaging_Listeners() {
-    // if (Platform.isIOS) iOS_Permission();
-
+  void _FirebaseCloudMessagingListeners() {
+    // 디바이스 Token 값
     _firebaseMessaging.getToken().then((token) {
       print('token:' + token);
     });
@@ -62,7 +60,7 @@ class NoticeListViewState extends State<NoticeListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SafeArea(
         child: Column(
       children: [
         // ListView 크기에 맞게 동적으로 공간차지를 도와줌
@@ -155,9 +153,7 @@ class NoticeListViewState extends State<NoticeListView> {
       child: Row(
         children: [
           Container(
-            color: (noticeData.imageList != null)
-                ? Colors.grey[200]
-                : Colors.white,
+            color: (noticeData.imageList[0].isEmpty) ? Colors.grey[200] : null,
             child: Image(
                 width: 50,
                 height: 50,
