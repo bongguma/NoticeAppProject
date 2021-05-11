@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yj_noticeboardproject/Data/CommentData.dart';
 import 'package:yj_noticeboardproject/Data/NoticeData.dart';
+import 'package:yj_noticeboardproject/Lib/DateLib.dart';
 
 Firestore firestore = Firestore.instance;
+DateLib dateLib = new DateLib();
 
 class NoticeDetailView extends StatelessWidget {
   final NoticeData noticeData;
@@ -29,17 +31,19 @@ class NoticeDetailView extends StatelessWidget {
                     ]),
           ],
         ),
-        body: GestureDetector(
-          child: Container(
-            child: DetailView(
-              noticeData: noticeData,
+        body: SafeArea(
+          child: GestureDetector(
+            child: Container(
+              child: DetailView(
+                noticeData: noticeData,
+              ),
             ),
+            behavior: HitTestBehavior.deferToChild,
+            onPanDown: (_) {
+              FocusScope.of(context)
+                  .requestFocus(FocusNode()); // 빈 곳 클릭 시, 키보드 내리기
+            },
           ),
-          behavior: HitTestBehavior.deferToChild,
-          onPanDown: (_) {
-            FocusScope.of(context)
-                .requestFocus(FocusNode()); // 빈 곳 클릭 시, 키보드 내리기
-          },
         ));
   }
 
@@ -96,8 +100,8 @@ class NoticeDetailViewState extends State<DetailView> {
     CommentData _commentData;
     if (widget.noticeData.comment != null) {
       widget.noticeData.comment.forEach((element) {
-        _commentData =
-            new CommentData.init(element['userName'], element['comment']);
+        _commentData = new CommentData.init(
+            element['userName'], element['comment'], element['date']);
         _message = CommentMessage(
           commenData: _commentData,
         );
@@ -125,7 +129,6 @@ class NoticeDetailViewState extends State<DetailView> {
           ),
           Container(
             // double.infinity는 부모 길이에 맞게 100%를 채워준다.
-            color: Colors.red,
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,6 +158,7 @@ class NoticeDetailViewState extends State<DetailView> {
                     height: 400,
                     child: ListView.builder(
                       itemCount: widget.noticeData.imageList.length,
+                      physics: new NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int i) {
                         return ListTile(
@@ -168,6 +172,9 @@ class NoticeDetailViewState extends State<DetailView> {
                         );
                       },
                     )),
+                Divider(
+                  color: Colors.black26,
+                ),
                 Container(
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -271,7 +278,8 @@ class NoticeDetailViewState extends State<DetailView> {
   }
 
   void _handleSubmitted(String comment) {
-    var commentData = new CommentData.init(userNameController.text, comment);
+    var commentData = new CommentData.init(
+        userNameController.text, comment, dateLib.formatDateYYYYMMDDHHMMSS());
     var message = CommentMessage(
       commenData: commentData,
     );
@@ -281,7 +289,11 @@ class NoticeDetailViewState extends State<DetailView> {
           .document(widget.noticeData.number)
           .updateData({
         "commentData": FieldValue.arrayUnion([
-          {"userName": userNameController.text, "comment": commentData.comment},
+          {
+            "userName": userNameController.text,
+            "comment": commentData.comment,
+            "date": dateLib.formatDateYYYYMMDDHHMMSS()
+          },
         ])
       });
       _messages.insert(0, message);
