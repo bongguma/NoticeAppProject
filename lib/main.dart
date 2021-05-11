@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yj_noticeboardproject/showNoticeListView.dart';
+import 'package:yj_noticeboardproject/NoticeLoginView.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,7 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ShowNoticeListView(),
+      // home: ShowNoticeListView(),
+      home: NoticeLoginView(),
     );
   }
 }
