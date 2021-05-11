@@ -114,7 +114,6 @@ class LoginViewState extends State<LoginView> {
           email: _emailController.text, password: _passwordController.text);
       if (newUser != null) {
         // 로그인 성공
-        print('newUser :: ' + newUser.toString());
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => ShowNoticeListView()));
       } else {}

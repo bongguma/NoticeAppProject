@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:yj_noticeboardproject/ChartExampleView.dart';
 import 'package:yj_noticeboardproject/CreateNoticeView.dart';
 import 'package:yj_noticeboardproject/NoticeDetailView.dart';
 import 'package:yj_noticeboardproject/Data/NoticeData.dart';
@@ -97,12 +98,9 @@ class NoticeListViewState extends State<NoticeListView> {
               onPressed: () {
                 // chart 라이브러리 사용해서 예제 진행-
                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NoticeLoginView()))
-                    .then((value) => {
-                          refreshList(),
-                        });
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChartExampleView()));
               },
             ),
             ElevatedButton(
