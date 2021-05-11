@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:yj_noticeboardproject/ChartExampleView.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yj_noticeboardproject/CreateNoticeView.dart';
 import 'package:yj_noticeboardproject/NoticeDetailView.dart';
 import 'package:yj_noticeboardproject/Data/NoticeData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:yj_noticeboardproject/NoticeLoginView.dart';
 
 List<NoticeData> noticeDataList = []; // 전역으로 noticeDataList 가져오기
 var refreshKey = GlobalKey<RefreshIndicatorState>();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 Firestore firestore = Firestore.instance;
+final _auth = FirebaseAuth.instance;
 
 // 제일 겉면은 변경 가능 상태가 필요하지 않은 widget
 class ShowNoticeListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('게시판'),
+    // 뒤로 가기 제어를 위한 widget
+    return WillPopScope(
+      onWillPop: () {
+        SystemNavigator.pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false, //backBtn hide 처리
+          title: Text('게시판'),
+        ),
+        body: NoticeListView(),
       ),
-      body: NoticeListView(),
     );
   }
 }
@@ -40,7 +50,7 @@ class NoticeListViewState extends State<NoticeListView> {
   }
 
   void _FirebaseCloudMessagingListeners() {
-    // 디바이스 Token 값
+    // firebase FCM 디바이스 Token 값
     _firebaseMessaging.getToken().then((token) {
       print('token:' + token);
     });
@@ -89,10 +99,20 @@ class NoticeListViewState extends State<NoticeListView> {
                 Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ChartExampleView()))
+                            builder: (context) => NoticeLoginView()))
                     .then((value) => {
                           refreshList(),
                         });
+              },
+            ),
+            ElevatedButton(
+              child: Text('로그아웃'),
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => NoticeLoginView()),
+                    (route) => false);
               },
             ),
           ],
