@@ -15,6 +15,12 @@ NoticeData noticeData = new NoticeData();
 File _image;
 
 class CreateNoticeView extends StatelessWidget {
+  final NoticeData noticeData;
+  final bool isModify;
+
+  const CreateNoticeView({Key key, this.noticeData, this.isModify})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +28,17 @@ class CreateNoticeView extends StatelessWidget {
         title: Text('게시글 등록하기'),
       ),
       resizeToAvoidBottomInset: false,
-      body: NoticeView(),
+      body: NoticeView(noticeData: noticeData, isModify: isModify),
     );
   }
 }
 
 class NoticeView extends StatefulWidget {
+  final NoticeData noticeData;
+  final bool isModify;
+
+  const NoticeView({Key key, this.noticeData, this.isModify}) : super(key: key);
+
   @override
   NoticeViewState createState() => NoticeViewState();
 }
@@ -91,6 +102,8 @@ class NoticeViewState extends State<NoticeView> {
                   controller: noticeIDController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
+                    // String 형식으로 출력하는데 왜 error인지 알 수가 없음.
+                    // labelText: widget.noticeData.title.toString(),
                     hintText: '작성자 아이디',
                   ),
                   validator: (value) {

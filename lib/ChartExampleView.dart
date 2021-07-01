@@ -1,6 +1,12 @@
 // 제일 겉면은 변경 가능 상태가 필요하지 않은 widget
+import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:yj_noticeboardproject/CreateNoticeView.dart';
+import 'package:yj_noticeboardproject/Data/ChartData.dart';
+import 'package:yj_noticeboardproject/ShowNoticeListView.dart';
 
 class ChartExampleView extends StatelessWidget {
   @override
@@ -20,12 +26,22 @@ class ChartView extends StatefulWidget {
 }
 
 class ChartViewState extends State<ChartView> {
+  Future<ChartData> futureChartData;
+
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
   ];
 
   bool showAvg = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    futureChartData = fetchChartData();
+    // print('futureChartData :: ' + futureChartData.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +60,11 @@ class ChartViewState extends State<ChartView> {
               setState(() {
                 showAvg = !showAvg;
               });
+            },
+          ),
+          RaisedButton(
+            onPressed: () {
+              Get.find<NoticeListViewState>().test();
             },
           ),
           AspectRatio(
@@ -95,7 +116,7 @@ class ChartViewState extends State<ChartView> {
               fontWeight: FontWeight.bold,
               fontSize: 16),
           getTitles: (value) {
-            print('bottomTitles $value');
+            // print('bottomTitles $value');
             switch (value.toInt()) {
               case 2:
                 return 'MAR';
@@ -116,7 +137,7 @@ class ChartViewState extends State<ChartView> {
             fontSize: 12,
           ),
           getTitles: (value) {
-            print('leftTitles $value');
+            // print('leftTitles $value');
             switch (value.toInt()) {
               case 1:
                 return '10k';
@@ -271,4 +292,19 @@ class ChartViewState extends State<ChartView> {
       ],
     );
   }
+}
+
+Future<ChartData> fetchChartData() async {
+  // String uriStr =
+  //     "https://some.co.kr/sometrend/analysis/trend/transition?startDate=20210211&endDate=20210510&topN=100&period=0&keyword=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8&analysisMonths=0&categorySetName=TSN&excludeRT=true&sources=blog";
+  // Uri uri = uriStr as Uri;
+  // final response = await http.get(uri);
+  //
+  // if (response.statusCode == 200) {
+  //   // If the server did return a 200 OK response,
+  //   // then parse the JSON.
+  //   return ChartData.fromJson(json.decode(response.body));
+  // } else {
+  //   throw Exception('Failed to load ChartData');
+  // }
 }

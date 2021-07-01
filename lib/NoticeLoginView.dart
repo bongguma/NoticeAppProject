@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:yj_noticeboardproject/NoticeJoinView.dart';
-import 'package:yj_noticeboardproject/showNoticeListView.dart';
+import 'package:yj_noticeboardproject/ShowNoticeListView.dart';
 
 class NoticeLoginView extends StatelessWidget {
   @override
@@ -114,8 +115,9 @@ class LoginViewState extends State<LoginView> {
           email: _emailController.text, password: _passwordController.text);
       if (newUser != null) {
         // 로그인 성공
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ShowNoticeListView()));
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => ShowNoticeListView()));
+        Get.to(ShowNoticeListView(), transition: Transition.downToUp);
       } else {}
       setState(() {});
     } catch (e) {

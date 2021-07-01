@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:yj_noticeboardproject/ChartExampleView.dart';
 import 'package:yj_noticeboardproject/CreateNoticeView.dart';
 import 'package:yj_noticeboardproject/NoticeDetailView.dart';
@@ -69,6 +70,10 @@ class NoticeListViewState extends State<NoticeListView> {
     );
   }
 
+  void test() {
+    print('인스턴스 데이터 이동 Test 진행 중????? ');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -85,22 +90,29 @@ class NoticeListViewState extends State<NoticeListView> {
               onPressed: () {
                 // createNoticeView에서 돌아오면 listView 데이터를 refresh 해줌.
                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateNoticeView()))
-                    .then((value) => {
-                          refreshList(),
-                        });
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateNoticeView(
+                              isModify: false,
+                              noticeData: null,
+                            ))).then((value) => {
+                      refreshList(),
+                    });
               },
             ),
             ElevatedButton(
               child: Text('차트 예제'),
               onPressed: () {
                 // chart 라이브러리 사용해서 예제 진행-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ChartExampleView()));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => ChartExampleView()));
+                Get.to(ChartExampleView(), transition: Transition.downToUp);
+                Get.put(NoticeListViewState());
+                // Get.to(ChartExampleView(), binding: BindingsBuilder(() {
+                //   Get.put(CountControllerWithReactive());
+                // }));
               },
             ),
             ElevatedButton(
@@ -201,6 +213,13 @@ class NoticeListViewState extends State<NoticeListView> {
         ],
       ),
     );
+  }
+}
+
+class CountControllerWithReactive {
+  RxInt count = 0.obs;
+  void increase() {
+    count++;
   }
 }
 

@@ -23,16 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # Add the dependency for the Firebase Core Flutter SDK
-  firebase_core: ^0.4.0+9
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # 이렇게 하면 라이브러리를 제일 최신에 맞춰줌 -
+  get:
   fluttertoast: ^8.0.4
   google_sign_in: ^5.0.2
   intl: ^0.17.0
   cupertino_icons: ^0.1.2
   image_picker: ^0.6.0
+  fl_chart: ^0.10.0
+  http: ^0.13.3
   
   # Add the dependency for the FlutterFire plugin for Google Analytics
   firebase_analytics: ^5.0.2
@@ -43,7 +43,6 @@ dependencies:
   cloud_firestore: ^0.12.9+5
   firebase_storage : ^ 3.0.3
   firebase_messaging: ^5.1.5
-  fl_chart: ^0.10.0
   # bezier_chart: ^1.0.16
 
 dev_dependencies:

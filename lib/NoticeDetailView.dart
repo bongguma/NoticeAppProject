@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yj_noticeboardproject/CreateNoticeView.dart';
 import 'package:yj_noticeboardproject/Data/CommentData.dart';
 import 'package:yj_noticeboardproject/Data/NoticeData.dart';
 import 'package:yj_noticeboardproject/Lib/DateLib.dart';
@@ -23,6 +24,13 @@ class NoticeDetailView extends StatelessWidget {
                 onSelected: (selectedValue) {
                   if (selectedValue.toString() == 'delete') {
                     showDeleteAlertDialog(context);
+                  } else if (selectedValue.toString() == 'modify') {
+                    print('noticeData :: ' + noticeData.title.toString());
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateNoticeView(
+                                isModify: true, noticeData: noticeData)));
                   }
                 },
                 itemBuilder: (BuildContext ctx) => [
